@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <h1>RESTful API Test Panel</h1>
+    <div class="flex">
+      <div style="width: 720px; margin: 0 auto">
+        <h2>KKBOX</h2>
+        <div class="kkbox">
+          <span id="k_method"></span><span>/api/kkbox/charts/</span
+          ><select id="kid" style="font-size: 15px"></select
+          ><span>/tracks</span>
+        </div>
+        <div id="kkbox" class="result"></div>
+        <div>
+          <input onclick="queryKKBOX('GET')" type="submit" value="GET" />
+          <input onclick="queryKKBOX('POST')" type="submit" value="POST" />
+          <input
+            onclick="queryKKBOXALL('POST')"
+            type="submit"
+            value="POSTALL"
+          />
+          <input onclick="queryKKBOX('PUT')" type="submit" value="PUT" />
+          <input onclick="queryKKBOX('DELETE')" type="submit" value="DELETE" />
+        </div>
+      </div>
+    </div>
+  </body>
+  <style>
+    h2 {
+      margin: 0;
+    }
+    .flex {
+      display: flex;
+      text-align: center;
+    }
+    .kkbox {
+      border: 2px solid #5994d6;
+      padding: 5px;
+      font-size: 20px;
+    }
+    .result {
+      height: 400px;
+      overflow-y: auto;
+      border: 2px solid #5994d6;
+    }
+  </style>
+  <script>
+    // Initial buttons
+    const paths = [];
+    fetch("/api/kkbox/charts")
+      .then((response) => response.json())
+      .then((jsonData) => {
+        jsonData.forEach((item, index) => {
+          let id = item.id;
+          let title = item.title;
+          let cover = item.cover;
+
+          paths.push(`/api/kkbox/charts/${id}/tracks`);
+          kid.innerHTML += `<option value=${id}>${title}</option>`;
+        });
+      })
+      .catch((error) => console.log(error));
+    function queryKKBOXALL(method) {
+      paths.forEach((path) => {
+        fetch(path, { method: method })
+          .then((response) => response.json())
+          .then((jsonData) => {
+            console.log(jsonData);
+          })
+          .catch((error) => console.log(error));
+      });
+    }
+
+    function queryKKBOX(method) {
+      const id = document.querySelector("#kid").value;
+      const m_method = document.querySelector("#k_method");
+      const musics = document.querySelector("#kkbox");
+      const path = `/api/kkbox/charts/${id}/tracks`;
+      m_method.innerHTML = `${method}: `;
+
+      fetch(path, { method: method })
+        .then((response) => response.json())
+        .then((jsonData) => {
+          musics.innerHTML = "";
+          if (jsonData.length) {
+            jsonData.forEach((tracks) => {
+              let rankNo = tracks.rankNo;
+              let title = tracks.title;
+              let album = tracks.album;
+              let artist = tracks.artist;
+              let link = tracks.link;
+              let cover = tracks.cover;
+              let release_date = tracks.release_date;
+
+              musics.innerHTML += `<div style="padding:12px;display:flex;align-items:center;">
+                                    <div>${rankNo}.</div>
+                                    <img src="${cover}" style="width:50px;"/>
+                                    <div style="flex: 1 1 0">
+                                      <div style="width:200px;margin:auto"><a href=${link} target="_blank">${title}</a></div>
+                                      <div>${artist}</div>
+                                    </div>
+                                    <div style="flex: 1 1 0">${album}</div>
+                                    <div>${release_date}</div>
+                                   </div>`;
+            });
+          } else {
+            const result = jsonData.message;
+            musics.innerHTML = `<h2>${result}</h2>`;
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  </script>
+  <style>
+    body {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    ul {
+      display: flex;
+    }
+    ul li {
+      flex: 1 1 0;
+      list-style: none;
+      margin: 2rem;
+    }
+    ul li a {
+      text-decoration: none;
+    }
+  </style>
+</html>

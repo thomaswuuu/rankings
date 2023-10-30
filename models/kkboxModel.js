@@ -1,0 +1,173 @@
+const mongoose = require("mongoose");
+const axios = require("axios");
+let delayTime = 1000;
+
+const oauth2Schema = new mongoose.Schema({
+  access_token: { type: String, require: true },
+  token_type: { type: String, require: true },
+  expires_in: { type: Number, require: true },
+  last_timestamp: { type: Number, require: true },
+});
+
+const chartsSchema = require("../schemas/chartsSchema");
+const tracksSchema = require("../schemas/tracksSchema");
+
+const oauth2Model = mongoose.model("kkboxOauth2", oauth2Schema);
+const chartsModel = mongoose.model("kkboxCharts", chartsSchema);
+const tracksModel = mongoose.model("kkboxTracks", tracksSchema);
+
+// CRUD messages
+const messages = {
+  success: (type) => {
+    if (type == "C") return "Success: CREATE ok!";
+    if (type == "U") return "Success: UPDATE ok!";
+    if (type == "D") return "Success: DELETE ok!";
+  },
+  failed: (type) => {
+    if (type == "C")
+      return "Failed: CREATE is not allowed. Data is created, please update it!";
+    if (type == "R")
+      return "Failed: READ is not allowed. No data, please create it!";
+    if (type == "U")
+      return "Failed: UPDATE is not allowed. No data, please create it";
+    if (type == "D")
+      return "Failed: DELETE is not allowed. No data, please create it";
+  },
+};
+
+const getChartsModel = () => {
+  return chartsModel;
+};
+const getTracksModel = () => {
+  return tracksModel;
+};
+
+const getMessages = () => {
+  return messages;
+};
+
+/* Create token data */
+const createToken = async () => {
+  try {
+    // Get kkbox access token
+    const endpoint = "https://account.kkbox.com/oauth2/token";
+    const formatData = {
+      grant_type: "client_credentials",
+      client_id: process.env.KK_ID,
+      client_secret: process.env.KK_SECRET,
+    };
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    const { data } = await axios.post(endpoint, formatData, { headers });
+    const token = {
+      access_token: data.access_token,
+      token_type: data.token_type,
+      expires_in: data.expires_in,
+      last_timestamp: Math.floor(new Date().getTime() / 1000),
+    };
+    // Save kkbox access token
+    const length = await oauth2Model.count();
+    if (length) await oauth2Model.deleteMany();
+    const new_oauth2 = new oauth2Model(token);
+
+    return await new_oauth2.save();
+  } catch (error) {
+    throw error;
+  }
+};
+/* Get token data */
+const getToken = async () => {
+  try {
+    const oauth2Data = await oauth2Model.findOne();
+    const expires_in = Boolean(oauth2Data) ? oauth2Data.expires_in : 0;
+    const last_timestamp = Boolean(oauth2Data) ? oauth2Data.last_timestamp : 0;
+    if (expires_in <= 0) return await createToken();
+    // Elapsed time = current timestamp - last timestamp
+    const current_timestamp = Math.floor(new Date().getTime() / 1000);
+    const elapsedTime = current_timestamp - last_timestamp;
+    const updateData = {
+      expires_in: expires_in - elapsedTime,
+      last_timestamp: current_timestamp,
+    };
+    return await oauth2Model.findOneAndUpdate({}, updateData);
+  } catch (error) {
+    throw error;
+  }
+};
+
+/* Get charts data */
+const getChartsData = async () => {
+  try {
+    // Get charts list
+    const oauth2Data = await getToken();
+    const accessToken = oauth2Data.access_token;
+    const token_type = oauth2Data.token_type;
+    const endpoint = "https://api.kkbox.com/v1.1/charts?territory=TW";
+    const headers = {
+      accept: "application/json",
+      authorization: `${token_type} ${accessToken}`,
+    };
+    const response = await axios.get(endpoint, { headers });
+    const chartsData = response.data.data;
+    const chartsList = [];
+    chartsData.forEach((item, index) => {
+      chartsList.push({
+        id: item.id,
+        chartNo: index + 1,
+        title: item.title,
+        cover: item.images[0].url,
+      });
+    });
+    return chartsList;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/* Get tracks data */
+const getTracksData = async (playlist_id) => {
+  // Get tracks of specific charts playlist
+  try {
+    // Return result after 2 seconds
+    await new Promise((r) => setTimeout(r, delayTime));
+    delayTime += 1500;
+    const oauth2Data = await getToken();
+    const accessToken = oauth2Data.access_token;
+    const token_type = oauth2Data.token_type;
+    const endpoint = `https://api.kkbox.com/v1.1/charts/${playlist_id}/tracks?territory=TW&limit=10`;
+    const headers = {
+      accept: "application/json",
+      authorization: `${token_type} ${accessToken}`,
+    };
+    const response = await axios.get(endpoint, { headers });
+    const tracksList = [];
+    const tracksData = response.data.data;
+    tracksData.forEach((item, index) => {
+      let trackInfo = {
+        id: playlist_id,
+        track_id: item.id,
+        rankNo: index + 1,
+        title: item.name,
+        album: item.album.name,
+        artist: item.album.artist.name,
+        link: item.url,
+        cover: item.album.images[0].url,
+        release_date: item.album.release_date,
+      };
+      tracksList.push(trackInfo);
+    });
+
+    return tracksList;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = {
+  getChartsModel,
+  getTracksModel,
+  getMessages,
+  getChartsData,
+  getTracksData,
+};
