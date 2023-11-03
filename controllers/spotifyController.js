@@ -1,6 +1,6 @@
-const kkboxModels = require("../models/kkboxModel");
-const chartsModel = kkboxModels.getChartsModel();
-const TracksModel = kkboxModels.getTracksModel();
+const spotifyModels = require("../models/spotifyModel");
+const chartsModel = spotifyModels.getChartsModel();
+const TracksModel = spotifyModels.getTracksModel();
 const messages = require("../models/message");
 
 /* Create charts list with access token */
@@ -9,7 +9,7 @@ const createChartsList = async (req, res) => {
     const length = await chartsModel.count();
     if (length == 0) {
       // Get charts list
-      const chartsList = await kkboxModels.getChartsData();
+      const chartsList = await spotifyModels.getChartsData();
       // Save charts list
       chartsModel
         .insertMany(chartsList)
@@ -34,7 +34,7 @@ const createTracksList = async (req, res) => {
     const tracksLength = await TracksModel.count({ id: playlist_id });
     if (tracksLength == 0) {
       // Save tracks of playlist
-      const tracksList = await kkboxModels.getTracksData(playlist_id);
+      const tracksList = await spotifyModels.getTracksData(playlist_id);
       TracksModel.insertMany(tracksList)
         .then(() => {
           res.status(201).json({ message: messages.success("C") });
@@ -53,7 +53,7 @@ const createTracksList = async (req, res) => {
 /* Read charts list */
 const readChartsList = async (req, res) => {
   try {
-    const charts = await chartsModel.find().sort({ chartNo: 1 }).exec();
+    const charts = await chartsModel.find().sort({ title: -1 }).exec();
     const chartsList = charts.map((chart) => {
       return {
         id: chart.id,
@@ -104,9 +104,9 @@ const updateChartsList = async (req, res) => {
     const length = await chartsModel.count();
     if (length) {
       // Update new charts data
-      const chartsList = await kkboxModels.getChartsData();
+      const chartsList = await spotifyModels.getChartsData();
       chartsList.forEach((item) => {
-        const queryData = { id: item.id, chartNo: item.chartNo };
+        const queryData = { id: item.id };
         const updateData = {
           title: item.title,
           cover: item.cover,
@@ -132,7 +132,7 @@ const updateTracksList = async (req, res) => {
 
     if (length) {
       // Update new tracks data
-      const tracksList = await kkboxModels.getTracksData(playlist_id);
+      const tracksList = await spotifyModels.getTracksData(playlist_id);
       tracksList.forEach((item) => {
         const queryData = { id: item.id, rankNo: item.rankNo };
         const updateData = {

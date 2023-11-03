@@ -16,25 +16,6 @@ const oauth2Model = mongoose.model("kkboxOauth2", oauth2Schema);
 const chartsModel = mongoose.model("kkboxCharts", chartsSchema);
 const tracksModel = mongoose.model("kkboxTracks", tracksSchema);
 
-// CRUD messages
-const messages = {
-  success: (type) => {
-    if (type == "C") return "Success: CREATE ok!";
-    if (type == "U") return "Success: UPDATE ok!";
-    if (type == "D") return "Success: DELETE ok!";
-  },
-  failed: (type) => {
-    if (type == "C")
-      return "Failed: CREATE is not allowed. Data is created, please update it!";
-    if (type == "R")
-      return "Failed: READ is not allowed. No data, please create it!";
-    if (type == "U")
-      return "Failed: UPDATE is not allowed. No data, please create it";
-    if (type == "D")
-      return "Failed: DELETE is not allowed. No data, please create it";
-  },
-};
-
 const getChartsModel = () => {
   return chartsModel;
 };
@@ -101,23 +82,22 @@ const getChartsData = async () => {
   try {
     // Get charts list
     const oauth2Data = await getToken();
-    const accessToken = oauth2Data.access_token;
+    const access_token = oauth2Data.access_token;
     const token_type = oauth2Data.token_type;
     const endpoint = "https://api.kkbox.com/v1.1/charts?territory=TW";
     const headers = {
       accept: "application/json",
-      authorization: `${token_type} ${accessToken}`,
+      authorization: `${token_type} ${access_token}`,
     };
     const response = await axios.get(endpoint, { headers });
     const chartsData = response.data.data;
-    const chartsList = [];
-    chartsData.forEach((item, index) => {
-      chartsList.push({
+    const chartsList = chartsData.map((item, index) => {
+      return {
         id: item.id,
         chartNo: index + 1,
         title: item.title,
         cover: item.images[0].url,
-      });
+      };
     });
     return chartsList;
   } catch (error) {
@@ -129,33 +109,33 @@ const getChartsData = async () => {
 const getTracksData = async (playlist_id) => {
   // Get tracks of specific charts playlist
   try {
-    // Return result after 2 seconds
+    // Return result after 1.5 seconds
     await new Promise((r) => setTimeout(r, delayTime));
     delayTime += 1500;
     const oauth2Data = await getToken();
-    const accessToken = oauth2Data.access_token;
+    const access_token = oauth2Data.access_token;
     const token_type = oauth2Data.token_type;
-    const endpoint = `https://api.kkbox.com/v1.1/charts/${playlist_id}/tracks?territory=TW&limit=10`;
+    const endpoint = `https://api.kkbox.com/v1.1/charts/${playlist_id}/tracks?territory=TW&limit=50`;
     const headers = {
       accept: "application/json",
-      authorization: `${token_type} ${accessToken}`,
+      authorization: `${token_type} ${access_token}`,
     };
     const response = await axios.get(endpoint, { headers });
-    const tracksList = [];
     const tracksData = response.data.data;
-    tracksData.forEach((item, index) => {
-      let trackInfo = {
+    const tracksList = tracksData.map((item, index) => {
+      return {
         id: playlist_id,
         track_id: item.id,
         rankNo: index + 1,
         title: item.name,
         album: item.album.name,
         artist: item.album.artist.name,
-        link: item.url,
+        titleLink: item.url,
+        albumLink: item.album.url,
+        artistLink: item.album.artist.url,
         cover: item.album.images[0].url,
         release_date: item.album.release_date,
       };
-      tracksList.push(trackInfo);
     });
 
     return tracksList;

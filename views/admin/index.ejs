@@ -9,7 +9,13 @@
     <h1>RESTful API Test Panel</h1>
     <div class="flex">
       <div style="width: 720px; margin: 0 auto">
-        <h2>KKBOX</h2>
+        <h2 style="margin-bottom: 15px">KKBOX</h2>
+        <input
+          onclick="queryKKChart('POST')"
+          type="submit"
+          value="POST Charts"
+        />
+        <input onclick="queryKKChart('PUT')" type="submit" value="PUT Charts" />
         <div class="kkbox">
           <span id="k_method"></span><span>/api/kkbox/charts/</span
           ><select id="kid" style="font-size: 15px"></select
@@ -25,7 +31,43 @@
             value="POSTALL"
           />
           <input onclick="queryKKBOX('PUT')" type="submit" value="PUT" />
+          <input onclick="queryKKBOXALL('PUT')" type="submit" value="PUTALL" />
           <input onclick="queryKKBOX('DELETE')" type="submit" value="DELETE" />
+        </div>
+      </div>
+      <div style="width: 720px; margin: 0 auto">
+        <h2 style="margin-bottom: 15px">Spotify</h2>
+        <input
+          onclick="querySPChart('POST')"
+          type="submit"
+          value="POST Charts"
+        />
+        <input onclick="querySPChart('PUT')" type="submit" value="PUT Charts" />
+        <div class="spotify">
+          <span id="s_method"></span><span>/api/spotify/charts/</span
+          ><select id="sid" style="font-size: 15px"></select
+          ><span>/tracks</span>
+        </div>
+        <div id="spotify" class="result"></div>
+        <div>
+          <input onclick="querySpotify('GET')" type="submit" value="GET" />
+          <input onclick="querySpotify('POST')" type="submit" value="POST" />
+          <input
+            onclick="querySpotifyALL('POST')"
+            type="submit"
+            value="POSTALL"
+          />
+          <input onclick="querySpotify('PUT')" type="submit" value="PUT" />
+          <input
+            onclick="querySpotifyALL('PUT')"
+            type="submit"
+            value="PUTALL"
+          />
+          <input
+            onclick="querySpotify('DELETE')"
+            type="submit"
+            value="DELETE"
+          />
         </div>
       </div>
     </div>
@@ -38,7 +80,8 @@
       display: flex;
       text-align: center;
     }
-    .kkbox {
+    .kkbox,
+    .spotify {
       border: 2px solid #5994d6;
       padding: 5px;
       font-size: 20px;
@@ -51,7 +94,7 @@
   </style>
   <script>
     // Initial buttons
-    const paths = [];
+    const kkbox_paths = [];
     fetch("/api/kkbox/charts")
       .then((response) => response.json())
       .then((jsonData) => {
@@ -60,13 +103,49 @@
           let title = item.title;
           let cover = item.cover;
 
-          paths.push(`/api/kkbox/charts/${id}/tracks`);
+          kkbox_paths.push(`/api/kkbox/charts/${id}/tracks`);
           kid.innerHTML += `<option value=${id}>${title}</option>`;
         });
       })
       .catch((error) => console.log(error));
+
+    const spotify_paths = [];
+    fetch("/api/spotify/charts")
+      .then((response) => response.json())
+      .then((jsonData) => {
+        jsonData.forEach((item, index) => {
+          let id = item.id;
+          let title = item.title;
+          let cover = item.cover;
+
+          spotify_paths.push(`/api/spotify/charts/${id}/tracks`);
+          sid.innerHTML += `<option value=${id}>${title}</option>`;
+        });
+      })
+      .catch((error) => console.log(error));
+
+    function queryKKChart(method) {
+      fetch("/api/kkbox/charts", { method })
+        .then((response) => response.json())
+        .then((jsonData) => {
+          console.log(jsonData);
+        })
+        .catch((error) => console.log(error));
+    }
+
     function queryKKBOXALL(method) {
-      paths.forEach((path) => {
+      kkbox_paths.forEach((path) => {
+        fetch(path, { method: method })
+          .then((response) => response.json())
+          .then((jsonData) => {
+            console.log(jsonData);
+          })
+          .catch((error) => console.log(error));
+      });
+    }
+
+    function querySpotifyALL(method) {
+      spotify_paths.forEach((path) => {
         fetch(path, { method: method })
           .then((response) => response.json())
           .then((jsonData) => {
@@ -93,7 +172,54 @@
               let title = tracks.title;
               let album = tracks.album;
               let artist = tracks.artist;
-              let link = tracks.link;
+              let link = tracks.titleLink;
+              let cover = tracks.cover;
+              let release_date = tracks.release_date;
+
+              musics.innerHTML += `<div style="padding:12px;display:flex;align-items:center;">
+                                    <div>${rankNo}.</div>
+                                    <img src="${cover}" style="width:50px;"/>
+                                    <div style="flex: 1 1 0">
+                                      <div style="width:200px;margin:auto"><a href=${link} target="_blank">${title}</a></div>
+                                      <div>${artist}</div>
+                                    </div>
+                                    <div style="flex: 1 1 0">${album}</div>
+                                    <div>${release_date}</div>
+                                   </div>`;
+            });
+          } else {
+            const result = jsonData.message;
+            musics.innerHTML = `<h2>${result}</h2>`;
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+    function querySPChart(method) {
+      fetch("/api/spotify/charts", { method })
+        .then((response) => response.json())
+        .then((jsonData) => {
+          console.log(jsonData);
+        })
+        .catch((error) => console.log(error));
+    }
+    function querySpotify(method) {
+      const id = document.querySelector("#sid").value;
+      const m_method = document.querySelector("#s_method");
+      const musics = document.querySelector("#spotify");
+      const path = `/api/spotify/charts/${id}/tracks`;
+      m_method.innerHTML = `${method}: `;
+
+      fetch(path, { method: method })
+        .then((response) => response.json())
+        .then((jsonData) => {
+          musics.innerHTML = "";
+          if (jsonData.length) {
+            jsonData.forEach((tracks) => {
+              let rankNo = tracks.rankNo;
+              let title = tracks.title;
+              let album = tracks.album;
+              let artist = tracks.artist;
+              let link = tracks.titleLink;
               let cover = tracks.cover;
               let release_date = tracks.release_date;
 

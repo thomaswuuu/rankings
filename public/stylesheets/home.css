@@ -1,13 +1,13 @@
 body {
-  font-family: Arial, Helvetica, sans-serif, "微軟正黑體";
+  font-family: sans-serif, Helvetica, Arial, "微軟正黑體";
 }
 header {
-  box-shadow: 0px 0px 10px 1px #cac6c6;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   transition: top 0.2s ease-in-out;
+  box-shadow: 0px 0px 10px 1px #cac6c6;
 }
 main {
   margin-top: 4rem;
@@ -23,10 +23,17 @@ h4 {
   margin: 0 auto;
   color: #3f423e;
 }
+.logo img {
+  width: 25px;
+}
 .btn {
   font-size: 20px;
+  text-align: center;
+  width: 100%;
   height: 3rem;
   color: #3f423e;
+  margin: 0 0.5rem;
+  padding: 0 5px;
 }
 .spinner-border {
   display: none;
@@ -39,6 +46,7 @@ h4 {
   justify-content: center;
   text-align: center;
   flex-wrap: wrap;
+  margin: 2rem 0;
   padding: 2rem;
 }
 .platforms h2 {
@@ -57,20 +65,23 @@ h4 {
 }
 .platform-box {
   flex-direction: column;
-  width: 200px;
+  width: 160px;
+  height: 125px;
   color: #3f423e;
-  margin: 1.5rem;
-  padding: 1rem 2rem;
+  margin: 2rem 1rem;
+  padding: 2rem 0;
   border-radius: 15px;
   background-color: white;
-  box-shadow: 2px 3px 11px 0px #b5b3b3;
+  box-shadow: 2px 3px 11px 0px lightsteelblue;
   cursor: pointer;
 }
-.platform-box i {
+.platform-box h4 {
+  font-size: 30px;
   margin: 10px 0;
 }
 .charts,
 .tracks {
+  display: none;
   margin: 2rem auto;
   flex-wrap: wrap;
   max-width: 1024px;
@@ -81,21 +92,19 @@ h4 {
   display: flex;
   margin: 2rem 0 0.5rem 0.5rem;
 }
-.charts h4 span,
-.tracks h4 span {
-  padding: 20px 15px;
+.charts h4 span {
+  padding: 10px 5px;
 }
 .chart-box {
   display: flex;
   width: 300px;
-  height: 60px;
+  height: 61px;
   margin: 10px;
   text-align: center;
   cursor: pointer;
-  box-shadow: 1px 1px 5px 1px #b5b3b3;
-  background-color: #f6fbfe;
 }
-.chart-box img {
+.chart-box img,
+.track-box img {
   width: 60px;
   height: 60px;
 }
@@ -104,25 +113,83 @@ h4 {
   font-size: 20px;
   color: darkslategray;
 }
-/* icons */
-.fa-bolt {
-  color: #f5ae14;
+.tracks {
+  max-width: 960px;
 }
-.fa-kickstarter {
-  color: #75e3f9;
+.tracks h4 span {
+  padding: 22px 16px;
 }
-.fa-spotify {
-  color: #0fe928;
+.tracks h4 img {
+  width: 70px;
+  height: 70px;
 }
-.fa-youtube {
-  color: #ff0019;
+.track-box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 80px;
+  margin: 10px 0 2px 5px;
+  padding-right: 1rem;
 }
-.fa-apple {
-  color: #232020;
+.track-box p {
+  width: 15px;
+  text-align: center;
+  font-size: 14px;
+  margin: 1rem;
 }
-.fa-lg {
-  width: 30px;
+.track-box .title {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  font-size: 16px;
+  margin: 0 0.5rem;
 }
+.track-box .title a {
+  text-decoration: none;
+  color: #1b1919;
+}
+.track-box .preview {
+  font-weight: bold;
+  color: #0d6efd;
+  text-align: center;
+  cursor: pointer;
+}
+.track-box .preview:hover {
+  color: #0a58ca;
+}
+.track-box .artist a {
+  font-size: 14px;
+  color: gray;
+}
+.track-box .album {
+  flex: 1 1 0;
+}
+.track-box .album a {
+  text-decoration: none;
+  color: #1b1919;
+}
+.track-box .date {
+  flex: 1 1 0;
+  text-align: center;
+}
+
+/* .platform-box {
+  color: white;
+  background-color: #09cef6;
+}
+.spotify h4 {
+  color: white;
+  background-color: #10c393;
+} */
+.kkbox-border {
+  border: 1px solid black;
+  box-shadow: 3px 3px 0px 0px #87abff;
+}
+.spotify-border {
+  border: 1px solid black;
+  box-shadow: 3px 3px 0px 0px #02bd18;
+}
+
 /* animations */
 .fade-in {
   opacity: 0;
@@ -140,7 +207,6 @@ h4 {
 @media screen and (max-width: 820px) {
   .platform-box {
     width: 125px;
-    margin: 1rem;
   }
   .platforms h2 {
     margin-top: 6rem;
@@ -148,9 +214,6 @@ h4 {
   }
   .platforms h3 {
     font-size: 18px;
-  }
-  .platform-box h4 {
-    font-size: 1em;
   }
   .platforms p {
     font-size: 16px;
@@ -164,21 +227,56 @@ h4 {
   .chart-box {
     width: 330px;
   }
+  .track-box .album,
+  .track-box .date {
+    display: none;
+  }
 }
 
-@media screen and (max-device-width: 376px) {
+@media screen and (max-device-width: 384px) {
   .platform-box {
     width: 125px;
-    margin: 0.5rem;
+    height: 120px;
+    margin: 4rem 0.5rem;
+    padding: 2rem 0;
   }
   .platforms h2 {
     margin-top: 3rem;
     font-size: 20px;
   }
-  .charts {
-    max-width: 767px;
+  .platform-box h4 {
+    font-size: 25px;
+  }
+  .charts h4,
+  .tracks h4 {
+    margin-left: 0;
+    justify-content: center;
   }
   .chart-box {
-    width: 330px;
+    width: 100%;
+  }
+  /* .tracks h4 span {
+    font-size: 18px;
+    padding: 24px 10px;
+  }
+  .tracks h4 img {
+    width: 70px;
+    height: 70px;
+  } */
+  .track-box p {
+    width: 12px;
+    text-align: center;
+    font-size: 14px;
+    margin: 0.5rem;
+  }
+  .track-box .title {
+    font-size: 14px;
+    margin: 0 0.5;
+  }
+  .track-box .artist {
+    font-size: 12px;
+  }
+  .track-box .listen {
+    font-size: 14px;
   }
 }

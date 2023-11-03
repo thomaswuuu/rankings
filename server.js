@@ -6,6 +6,7 @@ const session = require("express-session");
 const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 const kkboxRouter = require("./routes/kkbox");
+const spotifyRouter = require("./routes/spotify");
 const auth = require("./routes/auth");
 const admin = require("./routes/admin");
 
@@ -35,6 +36,7 @@ connectDB();
 // Route setting
 app.use("/api/", indexRouter);
 app.use("/api/kkbox/charts", kkboxRouter);
+app.use("/api/spotify/charts", spotifyRouter);
 // admin route
 app.use("/auth", auth);
 app.use("/admin", auth.authCheck, admin);
