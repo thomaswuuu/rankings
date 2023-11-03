@@ -178,7 +178,7 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
   const element = document.getElementById("embed-iframe");
   const options = {
     width: "100%",
-    height: "180",
+    height: "280",
   };
   const callback = (EmbedController) => {
     previewSpotifyController = EmbedController;
