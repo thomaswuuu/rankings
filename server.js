@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 const kkboxRouter = require("./routes/kkbox");
 const spotifyRouter = require("./routes/spotify");
+const autoupdateRouter = require("./routes/autoupdate");
 const auth = require("./routes/auth");
 const admin = require("./routes/admin");
 
@@ -37,6 +38,7 @@ connectDB();
 app.use("/api/", indexRouter);
 app.use("/api/kkbox/charts", kkboxRouter);
 app.use("/api/spotify/charts", spotifyRouter);
+app.use("/autoupdate", autoupdateRouter);
 // admin route
 app.use("/auth", auth);
 app.use("/admin", auth.authCheck, admin);
