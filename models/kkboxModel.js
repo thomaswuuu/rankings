@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const axios = require("axios");
-let delayTime = 1000;
 
 const oauth2Schema = new mongoose.Schema({
   access_token: { type: String, require: true },
@@ -109,9 +108,6 @@ const getChartsData = async () => {
 const getTracksData = async (playlist_id) => {
   // Get tracks of specific charts playlist
   try {
-    // Return result after 1.5 seconds
-    await new Promise((r) => setTimeout(r, delayTime));
-    delayTime += 1500;
     const oauth2Data = await getToken();
     const access_token = oauth2Data.access_token;
     const token_type = oauth2Data.token_type;

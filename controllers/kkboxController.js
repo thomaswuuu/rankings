@@ -105,7 +105,7 @@ const updateChartsList = async (req, res) => {
     if (length) {
       // Update new charts data
       const chartsList = await kkboxModels.getChartsData();
-      chartsList.forEach((item) => {
+      chartsList.map((item) => {
         const queryData = { id: item.id, chartNo: item.chartNo };
         const updateData = {
           title: item.title,
@@ -133,7 +133,7 @@ const updateTracksList = async (req, res) => {
     if (length) {
       // Update new tracks data
       const tracksList = await kkboxModels.getTracksData(playlist_id);
-      tracksList.forEach((item) => {
+      tracksList.map((item) => {
         const queryData = { id: item.id, rankNo: item.rankNo };
         const updateData = {
           track_id: item.track_id,
