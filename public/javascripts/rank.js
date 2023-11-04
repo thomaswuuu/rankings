@@ -81,7 +81,7 @@ const queryTracks = (e) => {
         let artistLink = track.artistLink;
         let cover = track.cover;
         let release_date = track.release_date;
-        tracks.innerHTML += `<div class="track-box ${borderStyle}">
+        tracks.innerHTML += `<div class="track-box ${borderStyle} fade-in">
                               <p>${rankNo}</p>
                               <img src=${cover} />
                               <div class="title">
@@ -136,7 +136,7 @@ const queryCharts = (e) => {
                             </h4>`;
         data.forEach((chart) => {
           let title = chart.title;
-          charts.innerHTML += `<div class="chart-box ${borderStyle}"  
+          charts.innerHTML += `<div class="chart-box ${borderStyle} fade-in"
                                 data-type="${type}"
                                 data-id="${chart.id}">
                                 <img src="${chart.cover}" />

@@ -8,6 +8,7 @@ header {
   right: 0;
   transition: top 0.2s ease-in-out;
   box-shadow: 0px 0px 10px 1px #cac6c6;
+  z-index: 1;
 }
 main {
   margin-top: 4rem;
@@ -79,6 +80,12 @@ h4 {
   font-size: 30px;
   margin: 10px 0;
 }
+.kkbox:active {
+  color: #09cef6;
+}
+.spotify:active {
+  color: #0bd022;
+}
 .charts,
 .tracks {
   display: none;
@@ -113,6 +120,7 @@ h4 {
   font-size: 20px;
   color: darkslategray;
 }
+
 .tracks {
   max-width: 960px;
 }
@@ -148,6 +156,9 @@ h4 {
   text-decoration: none;
   color: #1b1919;
 }
+.track-box .title a:hover {
+  text-decoration: underline;
+}
 .track-box .preview {
   font-weight: bold;
   color: #0d6efd;
@@ -161,6 +172,9 @@ h4 {
   font-size: 14px;
   color: gray;
 }
+.track-box .artist a:hover {
+  text-decoration: underline;
+}
 .track-box .album {
   flex: 1 1 0;
 }
@@ -168,19 +182,13 @@ h4 {
   text-decoration: none;
   color: #1b1919;
 }
+.track-box .album a:hover {
+  text-decoration: underline;
+}
 .track-box .date {
   flex: 1 1 0;
   text-align: center;
 }
-
-/* .platform-box {
-  color: white;
-  background-color: #09cef6;
-}
-.spotify h4 {
-  color: white;
-  background-color: #10c393;
-} */
 .kkbox-border {
   border: 1px solid black;
   box-shadow: 3px 3px 0px 0px #87abff;
@@ -193,7 +201,7 @@ h4 {
 /* animations */
 .fade-in {
   opacity: 0;
-  animation: fadeIn 0.5s ease-in-out forwards;
+  animation: fadeIn 0.3s ease-in-out forwards;
 }
 @keyframes fadeIn {
   from {
