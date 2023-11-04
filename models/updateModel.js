@@ -4,7 +4,21 @@ const updateSchema = new mongoose.Schema({
   platform: { type: String, require: true },
   updateAt: { type: String, require: true },
 });
+const statusSchema = new mongoose.Schema({
+  status: { type: String, require: true },
+});
 
-const updateModel = mongoose.model("updateTime", updateSchema);
+const updateTime = mongoose.model("updateTime", updateSchema);
+const updateStatus = mongoose.model("updateStatus", statusSchema);
 
-module.exports = updateModel;
+const getUpdateTime = () => {
+  return updateTime;
+};
+const getUpdateStatus = () => {
+  return updateStatus;
+};
+
+module.exports = {
+  getUpdateTime,
+  getUpdateStatus,
+};
