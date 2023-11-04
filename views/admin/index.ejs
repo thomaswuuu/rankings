@@ -134,24 +134,30 @@
     }
 
     function queryKKBOXALL(method) {
-      kkbox_paths.forEach((path) => {
+      let delayTime = 2000;
+      kkbox_paths.forEach(async (path) => {
         fetch(path, { method: method })
           .then((response) => response.json())
           .then((jsonData) => {
             console.log(jsonData);
           })
           .catch((error) => console.log(error));
+        // Fetch with 2 seconds delay
+        await new Promise((r) => setTimeout(r, delayTime));
       });
     }
 
     function querySpotifyALL(method) {
-      spotify_paths.forEach((path) => {
+      let delayTime = 2000;
+      spotify_paths.forEach(async (path) => {
         fetch(path, { method: method })
           .then((response) => response.json())
           .then((jsonData) => {
             console.log(jsonData);
           })
           .catch((error) => console.log(error));
+        // Fetch with 2 seconds delay
+        await new Promise((r) => setTimeout(r, delayTime));
       });
     }
 
