@@ -7,67 +7,113 @@
   </head>
   <body>
     <h1>RESTful API Test Panel</h1>
-    <div class="flex">
+    <div style="text-align: center">
+      <input
+        onclick="autoUpdate('start')"
+        type="submit"
+        value="auto update start"
+      />
+      <input
+        onclick="autoUpdate('stop')"
+        type="submit"
+        value="auto update stop"
+      />
+      <input
+        onclick="autoUpdate('time')"
+        type="submit"
+        value="auto update time"
+      />
+      <input
+        onclick="autoUpdate('status')"
+        type="submit"
+        value="auto update status"
+      />
+    </div>
+    <div style="display: flex; flex-wrap: wrap">
       <div style="width: 720px; margin: 0 auto">
-        <h2 style="margin-bottom: 15px">KKBOX</h2>
-        <input
-          onclick="queryKKChart('POST')"
-          type="submit"
-          value="POST Charts"
-        />
-        <input onclick="queryKKChart('PUT')" type="submit" value="PUT Charts" />
-        <div class="kkbox">
-          <span id="k_method"></span><span>/api/kkbox/charts/</span
-          ><select id="kid" style="font-size: 15px"></select
-          ><span>/tracks</span>
-        </div>
-        <div id="kkbox" class="result"></div>
-        <div>
-          <input onclick="queryKKBOX('GET')" type="submit" value="GET" />
-          <input onclick="queryKKBOX('POST')" type="submit" value="POST" />
-          <input
-            onclick="queryKKBOXALL('POST')"
-            type="submit"
-            value="POSTALL"
-          />
-          <input onclick="queryKKBOX('PUT')" type="submit" value="PUT" />
-          <input onclick="queryKKBOXALL('PUT')" type="submit" value="PUTALL" />
-          <input onclick="queryKKBOX('DELETE')" type="submit" value="DELETE" />
+        <h2 style="margin-bottom: 10px">KKBOX</h2>
+        <div class="flex">
+          <div>
+            <div class="kkbox">
+              <span id="k_method"></span><span>/api/kkbox/charts/</span
+              ><select id="kid" style="font-size: 15px"></select
+              ><span>/tracks</span>
+            </div>
+            <div id="kkbox" class="result"></div>
+          </div>
+          <div>
+            <input
+              onclick="queryKKChart('POST')"
+              type="submit"
+              value="POST Charts"
+            />
+            <input
+              onclick="queryKKChart('PUT')"
+              type="submit"
+              value="PUT Charts"
+            />
+            <input onclick="queryKKBOX('GET')" type="submit" value="GET" />
+            <input onclick="queryKKBOX('POST')" type="submit" value="POST" />
+            <input
+              onclick="queryKKBOXALL('POST')"
+              type="submit"
+              value="POSTALL"
+            />
+            <input onclick="queryKKBOX('PUT')" type="submit" value="PUT" />
+            <input
+              onclick="queryKKBOXALL('PUT')"
+              type="submit"
+              value="PUTALL"
+            />
+            <input
+              onclick="queryKKBOX('DELETE')"
+              type="submit"
+              value="DELETE"
+            />
+          </div>
         </div>
       </div>
       <div style="width: 720px; margin: 0 auto">
         <h2 style="margin-bottom: 15px">Spotify</h2>
-        <input
-          onclick="querySPChart('POST')"
-          type="submit"
-          value="POST Charts"
-        />
-        <input onclick="querySPChart('PUT')" type="submit" value="PUT Charts" />
-        <div class="spotify">
-          <span id="s_method"></span><span>/api/spotify/charts/</span
-          ><select id="sid" style="font-size: 15px"></select
-          ><span>/tracks</span>
-        </div>
-        <div id="spotify" class="result"></div>
-        <div>
-          <input onclick="querySpotify('GET')" type="submit" value="GET" />
-          <input onclick="querySpotify('POST')" type="submit" value="POST" />
-          <input
-            onclick="querySpotifyALL('POST')"
-            type="submit"
-            value="POSTALL"
-          />
-          <input onclick="querySpotify('PUT')" type="submit" value="PUT" />
-          <input
-            onclick="querySpotifyALL('PUT')"
-            type="submit"
-            value="PUTALL"
-          />
-          <input
-            onclick="querySpotify('DELETE')"
-            type="submit"
-            value="DELETE"
-          />
+        <div class="flex">
+          <div>
+            <div class="spotify">
+              <span id="s_method"></span><span>/api/spotify/charts/</span
+              ><select id="sid" style="font-size: 15px"></select
+              ><span>/tracks</span>
+            </div>
+            <div id="spotify" class="result"></div>
+          </div>
+          <div>
+            <input
+              onclick="querySPChart('POST')"
+              type="submit"
+              value="POST Charts"
+            />
+            <input
+              onclick="querySPChart('PUT')"
+              type="submit"
+              value="PUT Charts"
+            />
+            <input onclick="querySpotify('GET')" type="submit" value="GET" />
+            <input onclick="querySpotify('POST')" type="submit" value="POST" />
+            <input
+              onclick="querySpotifyALL('POST')"
+              type="submit"
+              value="POSTALL"
+            />
+            <input onclick="querySpotify('PUT')" type="submit" value="PUT" />
+            <input
+              onclick="querySpotifyALL('PUT')"
+              type="submit"
+              value="PUTALL"
+            />
+            <input
+              onclick="querySpotify('DELETE')"
+              type="submit"
+              value="DELETE"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -76,9 +122,15 @@
     h2 {
       margin: 0;
     }
+    input {
+      width: 120px;
+      height: 25px;
+      margin: 5px;
+    }
     .flex {
       display: flex;
       text-align: center;
+      /* flex-wrap: wrap; */
     }
     .kkbox,
     .spotify {
@@ -87,7 +139,8 @@
       font-size: 20px;
     }
     .result {
-      height: 400px;
+      width: 640px;
+      height: 360px;
       overflow-y: auto;
       border: 2px solid #5994d6;
     }
@@ -124,11 +177,51 @@
       })
       .catch((error) => console.log(error));
 
+    function autoUpdate(command) {
+      fetch(`/autoupdate/${command}`, { method: "GET" })
+        .then((response) => response.json())
+        .then((jsonData) => {
+          let message = "";
+          if (command == "start") {
+            message = jsonData.message;
+            kkbox.innerHTML = message;
+            spotify.innerHTML = message;
+          } else if (command == "stop") {
+            message = jsonData.message;
+            kkbox.innerHTML = message;
+            spotify.innerHTML = message;
+          } else if (command == "time") {
+            kkbox.innerHTML = "";
+            spotify.innerHTML = "";
+            jsonData.forEach((data) => {
+              if (data.platform == "kkbox") {
+                kkbox.innerHTML += `${data.updateAt} <br><br>`;
+              } else {
+                spotify.innerHTML += `${data.updateAt} <br><br>`;
+              }
+            });
+          } else if (command == "status") {
+            message = jsonData.status;
+            kkbox.innerHTML = message;
+            spotify.innerHTML = message;
+          }
+          console.log(jsonData);
+        })
+        .catch((error) => console.log(error));
+    }
+
     function queryKKChart(method) {
       fetch("/api/kkbox/charts", { method })
         .then((response) => response.json())
         .then((jsonData) => {
-          console.log(jsonData);
+          jsonData.forEach((item, index) => {
+            let id = item.id;
+            let title = item.title;
+            let cover = item.cover;
+
+            kkbox_paths.push(`/api/kkbox/charts/${id}/tracks`);
+            kid.innerHTML += `<option value=${id}>${title}</option>`;
+          });
         })
         .catch((error) => console.log(error));
     }
@@ -204,7 +297,14 @@
       fetch("/api/spotify/charts", { method })
         .then((response) => response.json())
         .then((jsonData) => {
-          console.log(jsonData);
+          jsonData.forEach((item, index) => {
+            let id = item.id;
+            let title = item.title;
+            let cover = item.cover;
+
+            spotify_paths.push(`/api/spotify/charts/${id}/tracks`);
+            sid.innerHTML += `<option value=${id}>${title}</option>`;
+          });
         })
         .catch((error) => console.log(error));
     }
