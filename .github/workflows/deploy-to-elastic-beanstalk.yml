@@ -63,8 +63,8 @@ jobs:
         application_name: "Rankings"
         environment_name: "Rankings-env"
         region: us-east-1
-        version_label: "version-label-${{ steps.format-time.outputs.replaced }}"
+        version_label: "e-learn-${{ steps.format-time.outputs.replaced }}"
         deployment_package: deploy.zip
         
     - name: Deployed!
-      run: npm start
+      run: echo App deployed to ELB
