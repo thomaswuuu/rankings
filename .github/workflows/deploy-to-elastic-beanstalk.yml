@@ -39,9 +39,6 @@ jobs:
     - name: Install NPM
       run: npm install
 
-    - name: Building application
-      run: npm run build
-
     - name: Generate deployment package
       run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
         
@@ -70,4 +67,4 @@ jobs:
         deployment_package: deploy.zip
         
     - name: Deployed!
-      run: echo App deployed to ELB
+      run: npm start
