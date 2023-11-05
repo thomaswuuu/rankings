@@ -1,0 +1,23 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      # MongoDB
+      MONGO_URI: ${MONGO_URI}
+      # KKBOX
+      KK_ID: ${KK_ID}
+      KK_SECRET: ${KK_SECRET}
+      # Spotify
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+      # Firebase
+      FIREBASE_API_KEY: ${FIREBASE_API_KEY}
+      FIREBASE_AUTHDOMAIN: ${FIREBASE_AUTHDOMAIN}
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
+      FIREBASE_APPID: ${FIREBASE_APPID}
+      ADMIN_UID: ${ADMIN_UID}
+    ports:
+      - "3000:3000"
