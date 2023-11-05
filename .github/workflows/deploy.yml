@@ -1,8 +1,7 @@
 name: Deploy Rankings
 on:
   push:
-    branches:
-      - main
+    branches: [ "master" ]
 
 jobs:
   build:
