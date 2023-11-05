@@ -1,0 +1,76 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+      
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Cache node_modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+           ${{ runner.os }}-node-
+
+    - name: Install NPM
+      run: npm install
+
+    - name: Linting check
+      run: npm run lint
+
+    - name: Building application
+      run: npm run build
+
+    - name: Generate deployment package
+      run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
+        
+    - name: Get timestamp
+      uses: gerred/actions/current-time@master
+      id: current-time
+
+    - name: Run string replace
+      uses: frabert/replace-string-action@master
+      id: format-time
+      with:
+        pattern: '[:\.]'
+        string: "${{ steps.current-time.output.time }}"
+        replace-with: '-'
+        flags: 'g'
+
+    - name: Beanstalk Deploy for app
+      uses: einaregilsson/beanstalk-deploy@v16
+      with:
+        aws_access_key: ${{secrets.ACCESS_KEY_ID}}
+        aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
+        application_name: "Rankings"
+        environment_name: "Rankings-env"
+        region: us-east-1
+        version_label: "version-label-${{ steps.format-time.outputs.replaced }}"
+        deployment_package: deploy.zip
+        
+    - name: Deployed!
+      run: echo App deployed to ELB
