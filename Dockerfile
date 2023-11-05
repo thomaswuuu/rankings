@@ -16,8 +16,5 @@ RUN npm install
 # Copy source code to working directory
 COPY  ./ ./
 
-# Expose listening port
-EXPOSE 3000
-
 # Initial process
 CMD ["npm","start"]

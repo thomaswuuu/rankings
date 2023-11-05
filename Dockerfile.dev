@@ -15,8 +15,5 @@ RUN npm install
 # Copy source code to working directory
 COPY --chown=node:node ./ ./
 
-# Expose listening port
-EXPOSE 3000
-
 # Initial process
 CMD ["npm","start"]

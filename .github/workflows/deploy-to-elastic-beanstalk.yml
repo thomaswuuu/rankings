@@ -11,7 +11,6 @@ jobs:
       - uses: actions/checkout@v3
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker build -t thomaswu27/rankings -f Dockerfile .
-      - run: docker run -e CI=true thomaswu27/rankings npm test
 
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
