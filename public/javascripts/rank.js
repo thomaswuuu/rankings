@@ -102,13 +102,23 @@ const queryTracks = (e) => {
                               </div>
                             </div>`;
       });
-      // Add click event of preview
+      tracks.innerHTML += `<p class="back">返回排行榜列表</p>`;
+      // Add click event of preview and back
       const previews = document.querySelectorAll(".preview");
       previews.forEach((preview) => {
         preview.addEventListener("click", () => {
           queryPreview(preview);
         });
       });
+      // Add click event to back text click
+      const back = document.querySelector(".back");
+      back.addEventListener("click", () => {
+        charts.style.display = "flex";
+        tracks.style.display = "none";
+        back.style.display = "none";
+        window.location.href = "#charts";
+      });
+      // display tracks results
       spinner.style.display = "none";
       tracks.style.display = "flex";
     }
@@ -185,3 +195,16 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
   };
   IFrameAPI.createController(element, options, callback);
 };
+
+// Header scroll down to hide
+let prevScrollpos = window.scrollY;
+window.addEventListener("scroll", () => {
+  let currentScrollPos = window.scrollY;
+  let header = document.querySelector("header");
+  if (prevScrollpos >= currentScrollPos || currentScrollPos <= 20) {
+    header.style.top = "0";
+  } else {
+    header.style.top = "-20vh";
+  }
+  prevScrollpos = currentScrollPos;
+});

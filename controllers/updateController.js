@@ -45,7 +45,7 @@ const updateTracksData = (type, chart_ids, delayTime) => {
       const date = new Date();
       const updateInfo = {
         platform: type,
-        updateAt: date.toString().slice(0, 24),
+        updateAt: date,
       };
       if (updteData.length >= 10) await updateTime.findOneAndDelete();
       const update = new updateTime(updateInfo);

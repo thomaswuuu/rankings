@@ -131,6 +131,16 @@ h4 {
   width: 70px;
   height: 70px;
 }
+.tracks .back {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d6efd;
+  margin: 1.2rem auto;
+  cursor: pointer;
+}
+.tracks .back:active {
+  text-decoration: underline;
+}
 .track-box {
   display: flex;
   align-items: center;
@@ -285,6 +295,9 @@ h4 {
     font-size: 12px;
   }
   .track-box .listen {
+    font-size: 14px;
+  }
+  .modal-title {
     font-size: 14px;
   }
 }
