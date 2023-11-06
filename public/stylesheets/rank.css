@@ -263,14 +263,14 @@ h4 {
   .chart-box {
     width: 100%;
   }
-  /* .tracks h4 span {
+  .tracks h4 span {
     font-size: 18px;
     padding: 24px 10px;
   }
   .tracks h4 img {
     width: 70px;
     height: 70px;
-  } */
+  }
   .track-box p {
     width: 12px;
     text-align: center;
