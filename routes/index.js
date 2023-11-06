@@ -12,9 +12,9 @@ router.put("/kkbox/charts", ach, kkboxController.updateChartsList);
 router.delete("/kkbox/charts", ach, kkboxController.deleteChartsList);
 
 /* Spotify charts*/
-router.post("/spotify/charts", spotifyController.createChartsList);
+router.post("/spotify/charts", ach, spotifyController.createChartsList);
 router.get("/spotify/charts", spotifyController.readChartsList);
-router.put("/spotify/charts", spotifyController.updateChartsList);
+router.put("/spotify/charts", ach, spotifyController.updateChartsList);
 router.delete("/spotify/charts", ach, spotifyController.deleteChartsList);
 
 module.exports = router;
