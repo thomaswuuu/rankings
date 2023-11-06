@@ -19,6 +19,7 @@ services:
       FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
       FIREBASE_APPID: ${FIREBASE_APPID}
       ADMIN_UID: ${ADMIN_UID}
+      # Port setting
       PORT: ${PORT}
     ports:
       - "80:80"
