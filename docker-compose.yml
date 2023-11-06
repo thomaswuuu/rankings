@@ -20,4 +20,4 @@ services:
       FIREBASE_APPID: ${FIREBASE_APPID}
       ADMIN_UID: ${ADMIN_UID}
     ports:
-      - "3000:3000"
+      - "3000:80"
