@@ -61,7 +61,7 @@ const updateTracksData = (type, chart_ids, delayTime) => {
 const autoUpdateTime = async (req, res) => {
   try {
     const command = req.params.command;
-    const intervalTime = 60 * 60 * 1000; // 1 hour
+    const intervalTime = 36 * 60 * 60 * 1000; // 1 day
     if (command == "start") {
       /* Start auto update */
       const statusInfo = await updateStatus.findOne();
