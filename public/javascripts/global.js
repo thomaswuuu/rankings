@@ -1,7 +1,7 @@
 class MusicsHub {
   /* 
     Initial properties：
-    - platform: kkbox, spotify, youtube, or apple
+    - platform: kkbox, spotify
     - playlsit_id:
       - null: get charts list of platform
       - otherwise: get specific playlsit tracks of platform

@@ -25,7 +25,7 @@ const queryPreview = (e) => {
   previewTitle.style.width = "100%";
   previewTitle.innerHTML = `${artist} - ${title} `;
   if (type == "KKBOX") {
-    widget_source = `https://widget.kkbox.com/v1/?id=${id}&type=song&terr=TW&lang=TC&autoplay=true&loop=false`;
+    widget_source = `https://widget.kkbox.com/v1/?id=${id}&autoplay=true&type=song&terr=TW&lang=TC&loop=false`;
     previewKKBOX.style.display = "block";
     previewSpotify.style.display = "none";
     previewKKBOX.setAttribute("height", "100px");
