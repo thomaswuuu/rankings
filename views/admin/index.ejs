@@ -43,6 +43,11 @@
           </div>
           <div>
             <input
+              onclick="queryKKChart('GET')"
+              type="submit"
+              value="GET Charts"
+            />
+            <input
               onclick="queryKKChart('POST')"
               type="submit"
               value="POST Charts"
@@ -86,6 +91,11 @@
           </div>
           <div>
             <input
+              onclick="querySPChart('GET')"
+              type="submit"
+              value="GET Charts"
+            />
+            <input
               onclick="querySPChart('POST')"
               type="submit"
               value="POST Charts"
@@ -119,6 +129,9 @@
     </div>
   </body>
   <style>
+    h1 {
+      text-align: center;
+    }
     h2 {
       margin: 0;
     }
@@ -211,17 +224,25 @@
     }
 
     function queryKKChart(method) {
-      fetch("/api/kkbox/charts", { method })
+      const musics = document.querySelector("#kkbox");
+      const kid = document.querySelector("#kid");
+      fetch("/api/kkbox/charts", { method: method })
         .then((response) => response.json())
         .then((jsonData) => {
-          jsonData.forEach((item, index) => {
-            let id = item.id;
-            let title = item.title;
-            let cover = item.cover;
+          if (jsonData.length) {
+            kid.innerHTML = "";
+            jsonData.forEach((item, index) => {
+              let id = item.id;
+              let title = item.title;
+              let cover = item.cover;
 
-            kkbox_paths.push(`/api/kkbox/charts/${id}/tracks`);
-            kid.innerHTML += `<option value=${id}>${title}</option>`;
-          });
+              kkbox_paths.push(`/api/kkbox/charts/${id}/tracks`);
+              kid.innerHTML += `<option value=${id}>${title}</option>`;
+            });
+          } else {
+            const result = jsonData.message;
+            musics.innerHTML = `<h2>${result}</h2>`;
+          }
         })
         .catch((error) => console.log(error));
     }
@@ -264,8 +285,8 @@
       fetch(path, { method: method })
         .then((response) => response.json())
         .then((jsonData) => {
-          musics.innerHTML = "";
           if (jsonData.length) {
+            musics.innerHTML = "";
             jsonData.forEach((tracks) => {
               let rankNo = tracks.rankNo;
               let title = tracks.title;
@@ -294,17 +315,24 @@
         .catch((error) => console.log(error));
     }
     function querySPChart(method) {
+      const sid = document.querySelector("#sid");
+      const musics = document.querySelector("#spotify");
       fetch("/api/spotify/charts", { method })
         .then((response) => response.json())
         .then((jsonData) => {
-          jsonData.forEach((item, index) => {
-            let id = item.id;
-            let title = item.title;
-            let cover = item.cover;
+          if (jsonData.length) {
+            jsonData.forEach((item, index) => {
+              let id = item.id;
+              let title = item.title;
+              let cover = item.cover;
 
-            spotify_paths.push(`/api/spotify/charts/${id}/tracks`);
-            sid.innerHTML += `<option value=${id}>${title}</option>`;
-          });
+              spotify_paths.push(`/api/spotify/charts/${id}/tracks`);
+              sid.innerHTML += `<option value=${id}>${title}</option>`;
+            });
+          } else {
+            const result = jsonData.message;
+            musics.innerHTML = `<h2>${result}</h2>`;
+          }
         })
         .catch((error) => console.log(error));
     }
@@ -318,8 +346,8 @@
       fetch(path, { method: method })
         .then((response) => response.json())
         .then((jsonData) => {
-          musics.innerHTML = "";
           if (jsonData.length) {
+            musics.innerHTML = "";
             jsonData.forEach((tracks) => {
               let rankNo = tracks.rankNo;
               let title = tracks.title;
