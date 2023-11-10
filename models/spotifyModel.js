@@ -69,10 +69,12 @@ const getChartsData = async () => {
     });
     let chartsData = response.body.playlists.items;
     let chartsList = chartsData.map((item) => {
+      let images = item.images;
+      let cover = Boolean(images[0]) ? images[0].url : "";
       return {
         id: item.id,
         title: item.name,
-        cover: item.images[0].url,
+        cover: cover,
       };
     });
     // Get extra "最Hit" related data
@@ -88,10 +90,12 @@ const getChartsData = async () => {
       )
       .map((item) => {
         // Add extra chart list to toplists
+        let images = item.images;
+        let cover = Boolean(images[0]) ? images[0].url : "";
         chartsList.push({
           id: item.id,
           title: item.name,
-          cover: item.images[0].url,
+          cover: cover,
         });
       });
 
@@ -117,6 +121,8 @@ const getTracksData = async (playlist_id) => {
 
     tracksData.forEach((item, index) => {
       if (item.track && index - bias < 50) {
+        let images = item.track.album.images;
+        let cover = Boolean(images[1]) ? images[1].url : "";
         let trackInfo = {
           id: playlist_id,
           track_id: item.track.id,
@@ -127,7 +133,7 @@ const getTracksData = async (playlist_id) => {
           titleLink: item.track.external_urls.spotify,
           albumLink: item.track.external_urls.spotify,
           artistLink: item.track.album.artists[0].external_urls.spotify,
-          cover: item.track.album.images[1].url,
+          cover: cover,
           release_date: item.track.album.release_date,
         };
         tracksList.push(trackInfo);

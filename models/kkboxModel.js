@@ -91,11 +91,13 @@ const getChartsData = async () => {
     const response = await axios.get(endpoint, { headers });
     const chartsData = response.data.data;
     const chartsList = chartsData.map((item, index) => {
+      let images = item.images;
+      let cover = Boolean(images[0]) ? images[0].url : "";
       return {
         id: item.id,
         chartNo: index + 1,
         title: item.title,
-        cover: item.images[0].url,
+        cover: cover,
       };
     });
     return chartsList;
@@ -119,6 +121,8 @@ const getTracksData = async (playlist_id) => {
     const response = await axios.get(endpoint, { headers });
     const tracksData = response.data.data;
     const tracksList = tracksData.map((item, index) => {
+      let images = item.album.images;
+      let cover = Boolean(images[0]) ? images[0].url : "";
       return {
         id: playlist_id,
         track_id: item.id,
@@ -129,7 +133,7 @@ const getTracksData = async (playlist_id) => {
         titleLink: item.url,
         albumLink: item.album.url,
         artistLink: item.album.artist.url,
-        cover: item.album.images[0].url,
+        cover: cover,
         release_date: item.album.release_date,
       };
     });
