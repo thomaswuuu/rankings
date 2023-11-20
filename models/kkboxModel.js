@@ -62,12 +62,13 @@ const getToken = async () => {
     const oauth2Data = await oauth2Model.findOne();
     const expires_in = Boolean(oauth2Data) ? oauth2Data.expires_in : 0;
     const last_timestamp = Boolean(oauth2Data) ? oauth2Data.last_timestamp : 0;
-    if (expires_in <= 0) return await createToken();
     // Elapsed time = current timestamp - last timestamp
     const current_timestamp = Math.floor(new Date().getTime() / 1000);
     const elapsedTime = current_timestamp - last_timestamp;
+    const new_expire_in = expires_in - elapsedTime;
+    if (new_expire_in <= 0) return await createToken();
     const updateData = {
-      expires_in: expires_in - elapsedTime,
+      expires_in: new_expire_in,
       last_timestamp: current_timestamp,
     };
     return await oauth2Model.findOneAndUpdate({}, updateData);
