@@ -4,141 +4,229 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body>
     <h1>RESTful API Test Panel</h1>
-    <div style="text-align: center">
-      <input
-        onclick="autoUpdate('start')"
-        type="submit"
-        value="auto update start"
-      />
-      <input
-        onclick="autoUpdate('stop')"
-        type="submit"
-        value="auto update stop"
-      />
-      <input
-        onclick="autoUpdate('time')"
-        type="submit"
-        value="auto update time"
-      />
-      <input
-        onclick="autoUpdate('status')"
-        type="submit"
-        value="auto update status"
-      />
+    <div style="width: 720px; margin: 0 auto">
+      <label>Auto update:</label>
+      <button onclick="autoUpdate('start')" type="button" class="btn btn-dark">
+        Start
+      </button>
+      <button onclick="autoUpdate('stop')" type="button" class="btn btn-dark">
+        Stop
+      </button>
+      <button onclick="autoUpdate('time')" type="button" class="btn btn-dark">
+        Time
+      </button>
+      <button onclick="autoUpdate('status')" type="button" class="btn btn-dark">
+        Status
+      </button>
     </div>
-    <div style="display: flex; flex-wrap: wrap">
-      <div style="width: 720px; margin: 0 auto">
+    <div style="display: flex; flex-wrap: wrap; width: 780px; margin: 0 auto">
+      <div>
         <h2 style="margin-bottom: 10px">KKBOX</h2>
         <div class="flex">
           <div>
             <div class="kkbox">
               <span id="k_method"></span><span>/api/kkbox/charts/</span
-              ><select id="kid" style="font-size: 15px"></select
+              ><select id="kid"></select
               ><span>/tracks</span>
             </div>
             <div id="kkbox" class="result"></div>
           </div>
           <div>
-            <input
+            <button
               onclick="queryKKChart('GET')"
-              type="submit"
-              value="GET Charts"
-            />
-            <input
+              type="button"
+              class="btn btn-light"
+            >
+              GET Charts
+            </button>
+            <button
               onclick="queryKKChart('POST')"
-              type="submit"
-              value="POST Charts"
-            />
-            <input
+              type="button"
+              class="btn btn-light"
+            >
+              POST Charts
+            </button>
+            <button
               onclick="queryKKChart('PUT')"
-              type="submit"
-              value="PUT Charts"
-            />
-            <input onclick="queryKKBOX('GET')" type="submit" value="GET" />
-            <input onclick="queryKKBOX('POST')" type="submit" value="POST" />
-            <input
-              onclick="queryKKBOXALL('POST')"
-              type="submit"
-              value="POSTALL"
-            />
-            <input onclick="queryKKBOX('PUT')" type="submit" value="PUT" />
-            <input
-              onclick="queryKKBOXALL('PUT')"
-              type="submit"
-              value="PUTALL"
-            />
-            <input
+              type="button"
+              class="btn btn-light"
+            >
+              PUT Charts
+            </button>
+            <button
+              onclick="queryKKBOX('GET')"
+              type="button"
+              class="btn btn-light"
+            >
+              GET Tracks
+            </button>
+            <button
+              onclick="queryKKBOX('POST')"
+              type="button"
+              class="btn btn-light"
+            >
+              POST Tracks
+            </button>
+
+            <button
+              onclick="queryKKBOX('PUT')"
+              type="button"
+              class="btn btn-light"
+            >
+              PUT Tracks
+            </button>
+
+            <button
               onclick="queryKKBOX('DELETE')"
-              type="submit"
-              value="DELETE"
-            />
+              type="button"
+              class="btn btn-light"
+            >
+              DELETE Tracks
+            </button>
+            <button
+              onclick="queryKKBOXALL('POST')"
+              type="button"
+              class="btn btn-light"
+            >
+              POSTALL Tracks
+            </button>
+            <button
+              onclick="queryKKBOXALL('PUT')"
+              type="button"
+              class="btn btn-light"
+            >
+              PUTALL Tracks
+            </button>
           </div>
         </div>
       </div>
-      <div style="width: 720px; margin: 0 auto">
+      <div>
         <h2 style="margin-bottom: 15px">Spotify</h2>
         <div class="flex">
           <div>
             <div class="spotify">
               <span id="s_method"></span><span>/api/spotify/charts/</span
-              ><select id="sid" style="font-size: 15px"></select
+              ><select id="sid"></select
               ><span>/tracks</span>
             </div>
             <div id="spotify" class="result"></div>
           </div>
           <div>
-            <input
+            <button
               onclick="querySPChart('GET')"
-              type="submit"
-              value="GET Charts"
-            />
-            <input
+              type="button"
+              class="btn btn-light"
+            >
+              GET Charts
+            </button>
+            <button
               onclick="querySPChart('POST')"
-              type="submit"
-              value="POST Charts"
-            />
-            <input
+              type="button"
+              class="btn btn-light"
+            >
+              POST Charts
+            </button>
+            <button
               onclick="querySPChart('PUT')"
-              type="submit"
-              value="PUT Charts"
-            />
-            <input onclick="querySpotify('GET')" type="submit" value="GET" />
-            <input onclick="querySpotify('POST')" type="submit" value="POST" />
-            <input
-              onclick="querySpotifyALL('POST')"
-              type="submit"
-              value="POSTALL"
-            />
-            <input onclick="querySpotify('PUT')" type="submit" value="PUT" />
-            <input
-              onclick="querySpotifyALL('PUT')"
-              type="submit"
-              value="PUTALL"
-            />
-            <input
+              type="button"
+              class="btn btn-light"
+            >
+              PUT Charts
+            </button>
+            <button
+              onclick="querySpotify('GET')"
+              type="button"
+              class="btn btn-light"
+            >
+              GET Tracks
+            </button>
+            <button
+              onclick="querySpotify('POST')"
+              type="button"
+              class="btn btn-light"
+            >
+              POST Tracks
+            </button>
+            <button
+              onclick="querySpotify('PUT')"
+              type="button"
+              class="btn btn-light"
+            >
+              PUT Tracks
+            </button>
+            <button
               onclick="querySpotify('DELETE')"
-              type="submit"
-              value="DELETE"
-            />
+              type="button"
+              class="btn btn-light"
+            >
+              DELETE Tracks
+            </button>
+            <button
+              onclick="querySpotifyALL('POST')"
+              type="button"
+              class="btn btn-light"
+            >
+              POSTALL Tracks
+            </button>
+            <button
+              onclick="querySpotifyALL('PUT')"
+              type="button"
+              class="btn btn-light"
+            >
+              PUTALL Tracks
+            </button>
           </div>
         </div>
       </div>
     </div>
   </body>
   <style>
+    body {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    ul {
+      display: flex;
+    }
+    ul li {
+      flex: 1 1 0;
+      list-style: none;
+      margin: 2rem;
+    }
+    ul li a {
+      text-decoration: none;
+    }
     h1 {
       text-align: center;
+      margin: 20px 0;
     }
     h2 {
       margin: 0;
     }
-    input {
-      width: 120px;
-      height: 25px;
-      margin: 5px;
+    label {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    select {
+      font-size: 18px;
+      background-color: white;
+      border: 1px solid darkgray;
+      border-radius: 5px;
+    }
+    button {
+      width: 125px;
+      margin: 3px;
+    }
+    a {
+      text-decoration: none;
     }
     .flex {
       display: flex;
@@ -147,15 +235,16 @@
     }
     .kkbox,
     .spotify {
-      border: 2px solid #5994d6;
+      border: 2px solid #565656;
+      border-bottom: 0;
       padding: 5px;
       font-size: 20px;
     }
     .result {
-      width: 640px;
-      height: 360px;
+      width: 725px;
+      height: 400px;
       overflow-y: auto;
-      border: 2px solid #5994d6;
+      border: 2px solid #565656;
     }
   </style>
   <script>
@@ -300,7 +389,9 @@
                                     <div>${rankNo}.</div>
                                     <img src="${cover}" style="width:50px;"/>
                                     <div style="flex: 1 1 0">
-                                      <div style="width:200px;margin:auto"><a href=${link} target="_blank">${title}</a></div>
+                                      <div style="width:200px;margin:auto">
+                                        <a href="${link}" target="_blank">${title}</a>
+                                      </div>
                                       <div>${artist}</div>
                                     </div>
                                     <div style="flex: 1 1 0">${album}</div>
@@ -361,7 +452,9 @@
                                     <div>${rankNo}.</div>
                                     <img src="${cover}" style="width:50px;"/>
                                     <div style="flex: 1 1 0">
-                                      <div style="width:200px;margin:auto"><a href=${link} target="_blank">${title}</a></div>
+                                      <div style="width:200px;margin:auto">
+                                        <a href="${link}" target="_blank">${title}</a>
+                                      </div>
                                       <div>${artist}</div>
                                     </div>
                                     <div style="flex: 1 1 0">${album}</div>
@@ -376,21 +469,4 @@
         .catch((error) => console.log(error));
     }
   </script>
-  <style>
-    body {
-      max-width: 1024px;
-      margin: 0 auto;
-    }
-    ul {
-      display: flex;
-    }
-    ul li {
-      flex: 1 1 0;
-      list-style: none;
-      margin: 2rem;
-    }
-    ul li a {
-      text-decoration: none;
-    }
-  </style>
 </html>
