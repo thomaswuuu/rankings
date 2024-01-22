@@ -52,6 +52,31 @@ const createToken = async () => {
   }
 };
 
+/* Get filtered charts data */
+const getFilteredChartsData = async (spotifyApi, keyword, limit) => {
+  let response = await spotifyApi.searchPlaylists(keyword, {
+    limit: limit,
+    offset: 0,
+    locale: "zh-TW",
+  });
+  let chartsData = response.body.playlists.items;
+
+  return chartsData
+    .filter(
+      (item) =>
+        !item.name.includes("20") && item.owner.display_name == "Spotify"
+    )
+    .map((item) => {
+      let images = item.images;
+      let cover = Boolean(images[0]) ? images[0].url : "";
+      return {
+        id: item.id,
+        title: item.name,
+        cover: cover,
+      };
+    });
+};
+
 /* Get charts data */
 const getChartsData = async () => {
   try {
@@ -61,44 +86,24 @@ const getChartsData = async () => {
     const spotifyApi = new SpotifyWebApi();
     spotifyApi.setAccessToken(access_token);
 
-    // Get toplists of TW
-    let response = await spotifyApi.getPlaylistsForCategory("toplists", {
-      country: "TW",
-      limit: 13,
-      offset: 0,
-    });
-    let chartsData = response.body.playlists.items;
-    let chartsList = chartsData.map((item) => {
-      let images = item.images;
-      let cover = Boolean(images[0]) ? images[0].url : "";
-      return {
-        id: item.id,
-        title: item.name,
-        cover: cover,
-      };
-    });
-    // Get extra "最Hit" related data
-    response = await spotifyApi.searchPlaylists("最Hit", {
-      limit: 8,
-      offset: 1,
-    });
-    chartsData = response.body.playlists.items;
-    chartsData
-      .filter(
-        (item) =>
-          !item.name.includes("2022") && item.owner.display_name == "Spotify"
-      )
-      .map((item) => {
-        // Add extra chart list to toplists
-        let images = item.images;
-        let cover = Boolean(images[0]) ? images[0].url : "";
-        chartsList.push({
-          id: item.id,
-          title: item.name,
-          cover: cover,
-        });
-      });
-
+    const searchKeywords = [
+      "最Hit",
+      "熱播50強 - 臺灣",
+      "熱播50強 - 全球",
+      "前 50 名 - 臺灣",
+      "前 50 名 - 全球",
+      "Today's Top Hits",
+      "Hot Hits Taiwan",
+      "Tokyo Super Hits",
+    ];
+    let chartsList = [];
+    for (let i = 0; i < searchKeywords.length; i++) {
+      let limit = 1;
+      let data;
+      if (i == 0) limit = 4; // Only for "最Hit" playlist
+      data = await getFilteredChartsData(spotifyApi, searchKeywords[i], limit);
+      chartsList = [...chartsList, ...data];
+    }
     return chartsList;
   } catch (error) {
     throw error;
@@ -131,7 +136,7 @@ const getTracksData = async (playlist_id) => {
           album: item.track.album.name,
           artist: item.track.album.artists[0].name,
           titleLink: item.track.external_urls.spotify,
-          albumLink: item.track.external_urls.spotify,
+          albumLink: item.track.album.external_urls.spotify,
           artistLink: item.track.album.artists[0].external_urls.spotify,
           cover: cover,
           release_date: item.track.album.release_date,

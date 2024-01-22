@@ -25,6 +25,24 @@ router.get("/signup", (req, res) => {
   res.render("admin/register", {});
 });
 
+router.post("/api/signin", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.psw;
+
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      req.session.uid = user.uid;
+      req.session.mail = req.body.email;
+      // console.log(req.session.uid);
+      res.json({ message: "Login success!" });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.json({ message: "Login failed!" });
+    });
+});
+
 router.post("/signin", (req, res) => {
   const email = req.body.email;
   const password = req.body.psw;
