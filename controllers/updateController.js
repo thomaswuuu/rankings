@@ -10,34 +10,37 @@ const spotifyTracks = spotifyModels.getTracksModel();
 let kkboxIntervalID = "";
 let spotifyIntervalID = "";
 
-const updateTracksData = (type, chart_ids, delayTime) => {
+const updateChartsData = async (type, delayTime) => {
   try {
     const platformModels = type == "kkbox" ? kkboxModels : spotifyModels;
-    const tracksModel = type == "kkbox" ? kkboxTracks : spotifyTracks;
+    const charts = type == "kkbox" ? kkboxCharts : spotifyCharts;
+
+    // Get new charts list
+    const chartsList = await platformModels.getChartsData();
+    // Delete old charts list
+    await charts.deleteMany();
+    // Save new charts list
+    await charts.insertMany(chartsList);
+    // Return new chart ids
+    return chartsList.map((value) => value.id);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateTracksData = async (type, chart_ids, delayTime) => {
+  try {
+    const platformModels = type == "kkbox" ? kkboxModels : spotifyModels;
+    const tracks = type == "kkbox" ? kkboxTracks : spotifyTracks;
+    // Delete old tracks list
+    await tracks.deleteMany();
+    // Get new tracks list
     chart_ids.map((chart_id, index) => {
+      // console.log("chart_id=" + chart_id);
       let delay = delayTime + index * 1000;
       setTimeout(async () => {
-        // Get track list data
         const tracksList = await platformModels.getTracksData(chart_id);
-        tracksList.map((item) => {
-          const queryData = { id: item.id, rankNo: item.rankNo };
-          const updateData = {
-            track_id: item.track_id,
-            title: item.title,
-            album: item.album,
-            artist: item.artist,
-            titleLink: item.titleLink,
-            albumLink: item.albumLink,
-            artistLink: item.artistLink,
-            cover: item.cover,
-            release_date: item.release_date,
-          };
-          // Save to database
-          tracksModel.findOneAndUpdate(queryData, updateData).catch((error) => {
-            throw error;
-          });
-        });
-        // console.log(type, delay, chart_id, new Date().getTime());
+        await tracks.insertMany(tracksList);
       }, delay);
     });
     // Save update time to database
@@ -67,21 +70,19 @@ const autoUpdateTime = async (req, res) => {
       const statusInfo = await updateStatus.findOne();
       if (!Boolean(statusInfo) || statusInfo.status == "Disabled") {
         // KKBOX
-        const chart_kids = (await kkboxCharts.find({}, "id")).map(
-          (value) => value.id
-        );
+        let chart_kids = await updateChartsData("kkbox");
         updateTracksData("kkbox", chart_kids, 0);
         kkboxIntervalID = setInterval(async () => {
+          chart_kids = updateChartsData("kkbox");
           updateTracksData("kkbox", chart_kids, 0);
         }, intervalTime);
 
         // Spotify
-        const chart_sids = (await spotifyCharts.find({}, "id")).map(
-          (value) => value.id
-        );
+        let chart_sids = await updateChartsData("spotify");
         // Wait 30 seconds for updating completed
         updateTracksData("spotify", chart_sids, 30 * 1000);
         spotifyIntervalID = setInterval(async () => {
+          chart_sids = updateChartsData("spotify");
           updateTracksData("spotify", chart_sids, 30 * 1000);
         }, intervalTime);
         // Set status enable
