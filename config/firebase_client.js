@@ -1,5 +1,5 @@
-// Import the functions you need from the SDKs you need
-const firebase = require("firebase");
+const firebase = require("firebase/app");
+const firebaseAuth = require("firebase/auth");
 require("dotenv").config();
 
 const config = {
@@ -10,6 +10,9 @@ const config = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(config);
+const firebaseApp = firebase.initializeApp(config);
 
-module.exports = firebase;
+module.exports = {
+  firebaseApp,
+  firebaseAuth,
+};

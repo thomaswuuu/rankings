@@ -1,6 +1,8 @@
 const express = require("express");
-const firebaseClient = require("../config/firebase_client");
-const auth = firebaseClient.auth();
+const firebase = require("../config/firebase_client");
+const firebaseApp = firebase.firebaseApp;
+const firebaseAuth = firebase.firebaseAuth;
+const auth = firebaseAuth.getAuth(firebaseApp);
 const router = express.Router();
 
 router.authCheck = (req, res, next) => {
@@ -25,34 +27,16 @@ router.get("/signup", (req, res) => {
   res.render("admin/register", {});
 });
 
-router.post("/api/signin", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.psw;
-
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then((user) => {
-      req.session.uid = user.uid;
-      req.session.mail = req.body.email;
-      // console.log(req.session.uid);
-      res.json({ message: "Login success!" });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.json({ message: "Login failed!" });
-    });
-});
-
 router.post("/signin", (req, res) => {
   const email = req.body.email;
   const password = req.body.psw;
 
-  auth
-    .signInWithEmailAndPassword(email, password)
+  firebaseAuth
+    .signInWithEmailAndPassword(auth, email, password)
     .then((user) => {
-      req.session.uid = user.uid;
+      req.session.uid = user.user.uid;
       req.session.mail = req.body.email;
-      // console.log(req.session.uid);
+      console.log(req.session.uid);
       res.redirect("/admin");
     })
     .catch((error) => {
@@ -74,8 +58,8 @@ router.post("/signup", (req, res) => {
   }
 
   if (isOk) {
-    auth
-      .createUserWithEmailAndPassword(email, password)
+    firebaseAuth
+      .createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log(req.session.uid);
         res.redirect("/auth/signin");
