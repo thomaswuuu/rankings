@@ -1,25 +1,39 @@
-name: Deploy Rankings Test
+name: Deploy Rankings
 on:
   push:
-    branches: ["develop"]
+    branches:
+      - master
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: docker build -t thomaswu27/rankings-test -f Dockerfile .
+      - run: docker build -t thomaswu27/rankings -f Dockerfile .
 
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Set AWS application and environment variables
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+            echo "application_name=rankings" >> $GITHUB_ENV
+            echo "environment_name=Rankings-env" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/develop' ]]; then
+            echo "application_name=testing" >> $GITHUB_ENV
+            echo "environment_name=Testing-env" >> $GITHUB_ENV
+          else
+            echo "Unknown branch, not setting variables"
+          fi
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v18
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-          application_name: testing
-          environment_name: testing-env
+          application_name: ${{ env.application_name }}
+          environment_name: ${{ env.environment_name }}
           existing_bucket_name: elasticbeanstalk-us-east-1-179525072156
           region: us-east-1
           version_label: ${{ github.sha }}
