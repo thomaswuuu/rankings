@@ -21,7 +21,7 @@ jobs:
             echo "application_name=rankings" >> $GITHUB_ENV
             echo "environment_name=Rankings-env" >> $GITHUB_ENV
           elif [[ $GITHUB_REF == 'refs/heads/develop' ]]; then
-            echo "application_name=testing" >> $GITHUB_ENV
+            echo "application_name=rankings" >> $GITHUB_ENV
             echo "environment_name=Testing-env" >> $GITHUB_ENV
           else
             echo "Unknown branch, not setting variables"
