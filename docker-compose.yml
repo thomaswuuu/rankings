@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: rankings
     environment:
       # MongoDB
       MONGO_URI: ${MONGO_URI}
@@ -19,7 +20,13 @@ services:
       FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
       FIREBASE_APPID: ${FIREBASE_APPID}
       ADMIN_UID: ${ADMIN_UID}
-      # Port setting
-      PORT: ${PORT}
+    ports:
+      - "3000:3000"
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    container_name: myNginx
     ports:
       - "80:80"
