@@ -29,5 +29,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile.dev
     container_name: myNginx
+    depends_on:
+      - web
     ports:
       - "80:80"
