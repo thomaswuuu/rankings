@@ -14,6 +14,10 @@ You can use "npm start" to run this app.
 ```
 $ npm start
 ```
+Or runnning on doker container：
+```
+$ docker-compose -f docker-compose-dev.yml up -d
+```
 # Completion
 The following is the results of this app.
 ### Home Page
@@ -40,7 +44,7 @@ The following is the results of this app.
 ![70fdb3a2-9dc8-4fa8-969d-842c09288e88](https://github.com/thomaswuuu/rankings/assets/5268096/da896cfa-5b0d-47c7-b1fb-b4b85c715080)
 
 # Rankings Architecture
-<img width="640" alt="串流排行榜架構圖" src="https://github.com/thomaswuuu/rankings/assets/5268096/a25fdb2f-5b73-4ca5-8148-774b1fcd53fe">
+<img width="720" alt="串流排行榜架構圖" src="https://github.com/thomaswuuu/rankings/assets/5268096/a25fdb2f-5b73-4ca5-8148-774b1fcd53fe">
 
 This project is for practicing node route, contorller, view, model data interaction, and creating RESTFul API with third-party API.
 
